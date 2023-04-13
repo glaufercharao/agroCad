@@ -38,6 +38,7 @@ public class PropertyInfoResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteProperty(@PathVariable Long id){
-        return service.deletePropertyInfo(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        service.deletePropertyInfo(id);
+        return ResponseEntity.noContent().build();
     }
 }

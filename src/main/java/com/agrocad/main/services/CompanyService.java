@@ -4,7 +4,11 @@ import com.agrocad.main.dto.CompanyDTO;
 import com.agrocad.main.entities.Company;
 import com.agrocad.main.mapper.Mappable;
 import com.agrocad.main.repositories.CompanyRepository;
+import com.agrocad.main.services.exceptions.DatabaseException;
+import com.agrocad.main.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,15 +45,14 @@ public class CompanyService implements Mappable {
         return map(companyTmp,CompanyDTO.class);
     }
 
-    @Transactional
-    public boolean deleteCompany(Long id) {
-        Optional<Company> companyTmp = companyRepository.findById(id);
-
-        if (!companyTmp.isPresent()) {
-            throw new RuntimeException();
+    public void deleteCompany(Long id) {
+        try {
+            companyRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException("Id not found "+id);
+        }catch (DataIntegrityViolationException e){
+            throw new DatabaseException("Integrity violation");
         }
-        companyRepository.deleteById(id);
-        return true;
     }
 
 }

@@ -4,7 +4,11 @@ import com.agrocad.main.dto.LaboratoryDTO;
 import com.agrocad.main.entities.Laboratory;
 import com.agrocad.main.mapper.Mappable;
 import com.agrocad.main.repositories.LaboratoryRepository;
+import com.agrocad.main.services.exceptions.DatabaseException;
+import com.agrocad.main.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,15 +51,16 @@ public class LaboratoryService implements Mappable {
         return map(laboratoryRepository.findAll(),LaboratoryDTO.class);
     }
 
-    @Transactional
-    public boolean deleteLaboratory(Long id) {
-        Optional<Laboratory> laboratoryTmp = laboratoryRepository.findById(id);
 
-        if (!laboratoryTmp.isPresent()) {
-            throw new RuntimeException();
+    public void deleteLaboratory(Long id) {
+
+        try {
+            laboratoryRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException("Id not found "+id);
+        }catch (DataIntegrityViolationException e){
+            throw new DatabaseException("Integrity violation");
         }
-        laboratoryRepository.deleteById(id);
-        return true;
     }
 
 }

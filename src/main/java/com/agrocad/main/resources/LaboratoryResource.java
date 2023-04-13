@@ -2,6 +2,7 @@ package com.agrocad.main.resources;
 
 import com.agrocad.main.dto.LaboratoryDTO;
 import com.agrocad.main.services.LaboratoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +28,18 @@ public class LaboratoryResource {
     }
 
     @PostMapping
-    public ResponseEntity<LaboratoryDTO> saveLaboratory(@RequestBody LaboratoryDTO laboratoryDTO){
+    public ResponseEntity<LaboratoryDTO> saveLaboratory(@Valid @RequestBody LaboratoryDTO laboratoryDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveLaboratory(laboratoryDTO));
     }
 
     @PutMapping
-    public ResponseEntity<LaboratoryDTO> updateLaboratory(@RequestBody LaboratoryDTO laboratoryDTO){
+    public ResponseEntity<LaboratoryDTO> updateLaboratory(@Valid @RequestBody LaboratoryDTO laboratoryDTO){
         return ResponseEntity.status(HttpStatus.OK).body(service.updateLaboratory(laboratoryDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteLaboratory(@PathVariable Long id){
-        return service.deleteLaboratory(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        service.deleteLaboratory(id);
+        return ResponseEntity.noContent().build();
     }
 }

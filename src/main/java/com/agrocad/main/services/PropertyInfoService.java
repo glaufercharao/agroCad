@@ -5,7 +5,11 @@ import com.agrocad.main.dto.PropertyInfoDTO;
 import com.agrocad.main.entities.PropertyInfo;
 import com.agrocad.main.mapper.Mappable;
 import com.agrocad.main.repositories.PropertyInfoRepository;
+import com.agrocad.main.services.exceptions.DatabaseException;
+import com.agrocad.main.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,15 +52,15 @@ public class PropertyInfoService implements Mappable {
         return map(propertyInfoRepository.findAll(),PropertyInfoDTO.class);
     }
 
-    @Transactional
-    public boolean deletePropertyInfo(Long id) {
-        Optional<PropertyInfo> propertyInfoTmp = propertyInfoRepository.findById(id);
+    public void deletePropertyInfo(Long id) {
 
-        if (!propertyInfoTmp.isPresent()) {
-            throw new RuntimeException();
+        try {
+            propertyInfoRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException("Id not found "+id);
+        }catch (DataIntegrityViolationException e){
+            throw  new DatabaseException("Integrity violation");
         }
-        propertyInfoRepository.deleteById(id);
-        return true;
     }
 
 }

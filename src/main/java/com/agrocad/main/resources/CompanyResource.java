@@ -2,6 +2,7 @@ package com.agrocad.main.resources;
 
 import com.agrocad.main.dto.CompanyDTO;
 import com.agrocad.main.services.CompanyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +21,18 @@ public class CompanyResource {
     }
 
     @PostMapping
-    public ResponseEntity<CompanyDTO> saveCompany(@RequestBody CompanyDTO companyDTO){
+    public ResponseEntity<CompanyDTO> saveCompany(@Valid @RequestBody CompanyDTO companyDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveCompany(companyDTO));
     }
 
     @PutMapping
-    public ResponseEntity<CompanyDTO> updateCompany(@RequestBody CompanyDTO companyDTO){
+    public ResponseEntity<CompanyDTO> updateCompany(@Valid @RequestBody CompanyDTO companyDTO){
         return ResponseEntity.status(HttpStatus.OK).body(service.updateCompany(companyDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteCompany(@PathVariable Long id){
-        return service.deleteCompany(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+         service.deleteCompany(id);
+         return ResponseEntity.noContent().build();
     }
 }

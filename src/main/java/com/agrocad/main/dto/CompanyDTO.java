@@ -1,21 +1,27 @@
 package com.agrocad.main.dto;
 
-import com.agrocad.main.entities.Laboratory;
-import com.agrocad.main.entities.PropertyInfo;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Instant;
 
 @Data
 public class CompanyDTO {
+
     private Long id;
+    @NotBlank(message = "Name is mandatory")
     private String name;
+    @NotNull(message = "Property is mandatory")
     private Instant initialDate;
+    @NotNull(message = "Property is mandatory")
     private Instant finalDate;
+    @NotBlank(message = "CNPJ is mandatory")
     private String cnpj;
+    @NotNull(message = "Property is mandatory")
     private PropertyInfoDTO propertyInfo;
+    @NotNull(message = "Property is mandatory")
     private LaboratoryDTO laboratory;
     private String observation;
 }

@@ -21,7 +21,7 @@ public class Company implements Serializable {
     @JoinColumn(name = "property_info_id")
     private PropertyInfo propertyInfo;
     @OneToOne
-    @JoinColumn(name = "property_info_id")
+    @JoinColumn(name = "laboratory_id")
     private Laboratory laboratory;
     private String observation;
 }

@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(name = "/company")
+@RequestMapping("/company")
 @RequiredArgsConstructor
 public class CompanyResource {
 
     private final CompanyService service;
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<CompanyDTO> findCompany(@PathVariable Long id){
        return ResponseEntity.ok().body(service.findCompany(id));
     }

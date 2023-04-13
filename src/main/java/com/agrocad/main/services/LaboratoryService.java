@@ -32,7 +32,7 @@ public class LaboratoryService implements Mappable {
         Optional<Laboratory> companyTmp = laboratoryRepository
                 .findById(laboratoryDTO.getId());
         if (!companyTmp.isPresent()) {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("Id not found");
         }
         return map(laboratoryRepository.save(map(laboratoryDTO, Laboratory.class)), LaboratoryDTO.class);
     }
@@ -41,7 +41,7 @@ public class LaboratoryService implements Mappable {
     public LaboratoryDTO findLaboratory(Long id){
         Optional<Laboratory> laboratoryTmp =laboratoryRepository.findById(id);
         if (!laboratoryTmp.isPresent()) {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("Id not found "+ id);
         }
         return map(laboratoryTmp,LaboratoryDTO.class);
     }
@@ -53,14 +53,16 @@ public class LaboratoryService implements Mappable {
 
 
     public void deleteLaboratory(Long id) {
-
-        try {
-            laboratoryRepository.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
+        if(laboratoryRepository.findById(id).isPresent()){
+            try {
+                laboratoryRepository.deleteById(id);
+            }catch (DataIntegrityViolationException e){
+                throw new DatabaseException("Integrity violation");
+            }
+        }else{
             throw new ResourceNotFoundException("Id not found "+id);
-        }catch (DataIntegrityViolationException e){
-            throw new DatabaseException("Integrity violation");
         }
+
     }
 
 }

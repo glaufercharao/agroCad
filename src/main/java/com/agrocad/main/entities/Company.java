@@ -2,7 +2,10 @@ package com.agrocad.main.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -10,6 +13,9 @@ import java.time.Instant;
 @Entity
 @Table(name = "tb_company")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Company implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

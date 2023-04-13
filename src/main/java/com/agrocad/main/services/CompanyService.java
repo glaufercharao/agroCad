@@ -31,7 +31,7 @@ public class CompanyService implements Mappable {
         Optional<Company> companyTmp = companyRepository
                 .findById(companyDTO.getId());
         if (!companyTmp.isPresent()) {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("Id not found");
         }
         return map(companyRepository.save(map(companyDTO, Company.class)), CompanyDTO.class);
     }
@@ -40,19 +40,22 @@ public class CompanyService implements Mappable {
     public CompanyDTO findCompany(Long id){
         Optional<Company> companyTmp =companyRepository.findById(id);
         if (!companyTmp.isPresent()) {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("Id not found "+ id);
         }
         return map(companyTmp,CompanyDTO.class);
     }
 
     public void deleteCompany(Long id) {
-        try {
-            companyRepository.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
+        if(companyRepository.findById(id).isPresent() ){
+            try {
+                companyRepository.deleteById(id);
+            }catch (DataIntegrityViolationException e){
+                throw new DatabaseException("Integrity violation");
+            }
+        }else{
             throw new ResourceNotFoundException("Id not found "+id);
-        }catch (DataIntegrityViolationException e){
-            throw new DatabaseException("Integrity violation");
         }
+
     }
 
 }

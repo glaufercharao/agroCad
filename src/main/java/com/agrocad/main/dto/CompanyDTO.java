@@ -3,11 +3,13 @@ package com.agrocad.main.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
 
 @Data
+@Builder
 public class CompanyDTO {
 
     private Long id;

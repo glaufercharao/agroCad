@@ -33,7 +33,7 @@ public class PropertyInfoService implements Mappable {
         Optional<PropertyInfo> propertyInfoTmp = propertyInfoRepository
                 .findById(propertyInfoDTO.getId());
         if (!propertyInfoTmp.isPresent()) {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("Id not found");
         }
         return map(propertyInfoRepository.save(map(propertyInfoDTO, PropertyInfo.class)), PropertyInfoDTO.class);
     }
@@ -42,7 +42,7 @@ public class PropertyInfoService implements Mappable {
     public PropertyInfoDTO findPropertyInfo(Long id){
         Optional<PropertyInfo> propertyInfoTmp =propertyInfoRepository.findById(id);
         if (!propertyInfoTmp.isPresent()) {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("Id not found "+ id);
         }
         return map(propertyInfoTmp, PropertyInfoDTO.class);
     }
@@ -53,14 +53,16 @@ public class PropertyInfoService implements Mappable {
     }
 
     public void deletePropertyInfo(Long id) {
-
-        try {
-            propertyInfoRepository.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
+        if(propertyInfoRepository.findById(id).isPresent()){
+            try {
+                propertyInfoRepository.deleteById(id);
+            }catch (DataIntegrityViolationException e){
+                throw  new DatabaseException("Integrity violation");
+            }
+        } else{
             throw new ResourceNotFoundException("Id not found "+id);
-        }catch (DataIntegrityViolationException e){
-            throw  new DatabaseException("Integrity violation");
         }
+
     }
 
 }

@@ -43,11 +43,12 @@ public class CompanyService implements Mappable {
 
     @Transactional
     public boolean deleteCompany(Long id) {
-        Optional<Company> companyTmp = companyRepository
-                .findById(id);
+        Optional<Company> companyTmp = companyRepository.findById(id);
+
         if (!companyTmp.isPresent()) {
             throw new RuntimeException();
         }
+        companyRepository.deleteById(id);
         return true;
     }
 

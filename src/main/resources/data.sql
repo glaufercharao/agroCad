@@ -1,8 +1,10 @@
 INSERT INTO TB_LABORATORY (name)  VALUES ('LABORATORIO XPTO LTDA');
 INSERT INTO TB_LABORATORY (name) VALUES ('LABORATORIO XYZ LTDA');
+INSERT INTO TB_LABORATORY (name) VALUES ('LABORATORIO ABC LTDA');
 
 INSERT INTO TB_PROPERTY_INFO (name) VALUES ('Nome exemplo fazenda');
 INSERT INTO TB_PROPERTY_INFO (name) VALUES ('Nome exemplo fazenda 2');
+INSERT INTO TB_PROPERTY_INFO (name) VALUES ('Nome exemplo fazenda 3');
 
 INSERT INTO TB_COMPANY  (name, cnpj, initial_date, final_date, observation, laboratory_id, property_info_id)
     VALUES ('Teste Companhia LTDA', '51.671.343/0001-19', TIMESTAMP WITH TIME ZONE '2023-04-13T00:09:00Z',

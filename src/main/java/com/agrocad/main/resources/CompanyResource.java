@@ -3,11 +3,9 @@ package com.agrocad.main.resources;
 import com.agrocad.main.dto.CompanyDTO;
 import com.agrocad.main.services.CompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/company")
@@ -19,5 +17,20 @@ public class CompanyResource {
     @GetMapping("/{id}")
     public ResponseEntity<CompanyDTO> findCompany(@PathVariable Long id){
        return ResponseEntity.ok().body(service.findCompany(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<CompanyDTO> saveCompany(@RequestBody CompanyDTO companyDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.saveCompany(companyDTO));
+    }
+
+    @PutMapping
+    public ResponseEntity<CompanyDTO> updateCompany(@RequestBody CompanyDTO companyDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(service.updateCompany(companyDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCompany(@PathVariable Long id){
+        return service.deleteCompany(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
